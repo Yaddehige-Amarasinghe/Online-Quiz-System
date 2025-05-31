@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Star, Target, Clock, Users, BookOpen, Award, TrendingUp, Zap, Crown, Medal, Flame } from 'lucide-react';
+import './Dashboard.css';
 
 const Dashboard = () => {
   const [user, setUser] = useState({
@@ -12,10 +12,38 @@ const Dashboard = () => {
   });
 
   const [achievements] = useState([
-    { id: 1, name: "Quiz Master", description: "Complete 50 quizzes", progress: 68, icon: Trophy, unlocked: false },
-    { id: 2, name: "Streak Warrior", description: "7-day streak", progress: 100, icon: Flame, unlocked: true },
-    { id: 3, name: "Perfect Score", description: "Get 100% on 5 quizzes", progress: 80, icon: Star, unlocked: false },
-    { id: 4, name: "Speed Demon", description: "Complete quiz in under 2 minutes", progress: 100, icon: Zap, unlocked: true }
+    { 
+      id: 1, 
+      name: "Quiz Master", 
+      description: "Complete 50 quizzes", 
+      progress: 68, 
+      icon: "🏆", 
+      unlocked: false 
+    },
+    { 
+      id: 2, 
+      name: "Streak Warrior", 
+      description: "7-day streak", 
+      progress: 100, 
+      icon: "🔥", 
+      unlocked: true 
+    },
+    { 
+      id: 3, 
+      name: "Perfect Score", 
+      description: "Get 100% on 5 quizzes", 
+      progress: 80, 
+      icon: "⭐", 
+      unlocked: false 
+    },
+    { 
+      id: 4, 
+      name: "Speed Demon", 
+      description: "Complete quiz in under 2 minutes", 
+      progress: 100, 
+      icon: "⚡", 
+      unlocked: true 
+    }
   ]);
 
   const [quizModules] = useState([
@@ -95,51 +123,41 @@ const Dashboard = () => {
     { rank: 5, name: "David Kim", xp: 1950, streak: 3 }
   ]);
 
-  const getDifficultyColor = (difficulty) => {
-    switch(difficulty) {
-      case 'Beginner': return 'text-green-600 bg-green-100';
-      case 'Intermediate': return 'text-yellow-600 bg-yellow-100';
-      case 'Advanced': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const getCategoryColor = (category) => {
-    const colors = {
-      'Programming': 'bg-blue-500',
-      'Design': 'bg-purple-500',
-      'Backend': 'bg-green-500',
-      'Database': 'bg-orange-500',
-      'Integration': 'bg-pink-500'
-    };
-    return colors[category] || 'bg-gray-500';
-  };
-
   const levelProgress = (user.xp % 200) / 200 * 100;
 
+  const handleQuizStart = (quizId) => {
+    console.log(`Starting quiz ${quizId}`);
+    // Add quiz start logic here
+  };
+
+  const handleChallengeAccept = () => {
+    console.log("Daily challenge accepted");
+    // Add challenge logic here
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-2">Welcome back, {user.name}! 🎯</h1>
-                <p className="text-purple-200">Ready to level up your skills today?</p>
+    <div className="dashboard-container">
+      <div className="dashboard-wrapper">
+        {/* Header Section */}
+        <div className="header-section">
+          <div className="header-card">
+            <div className="header-content">
+              <div className="user-info">
+                <h1 className="welcome-title">Welcome back, {user.name}! 🎯</h1>
+                <p className="welcome-subtitle">Ready to level up your skills today?</p>
               </div>
-              <div className="flex items-center space-x-4">
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-white">Level {user.level}</div>
-                  <div className="w-32 h-2 bg-white/20 rounded-full overflow-hidden">
+              <div className="level-section">
+                <div className="level-info">
+                  <div className="level-number">Level {user.level}</div>
+                  <div className="progress-bar">
                     <div 
-                      className="h-full bg-gradient-to-r from-yellow-400 to-orange-500 transition-all duration-500"
+                      className="progress-fill"
                       style={{ width: `${levelProgress}%` }}
                     ></div>
                   </div>
                 </div>
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                  <Crown className="w-8 h-8 text-white" />
+                <div className="level-badge">
+                  <span className="crown-icon">👑</span>
                 </div>
               </div>
             </div>
@@ -147,128 +165,124 @@ const Dashboard = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white transform hover:scale-105 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-2xl font-bold">{user.xp.toLocaleString()}</div>
-                <div className="text-blue-100">Total XP</div>
+        <div className="stats-grid">
+          <div className="stat-card stat-card-blue">
+            <div className="stat-content">
+              <div className="stat-info">
+                <div className="stat-number">{user.xp.toLocaleString()}</div>
+                <div className="stat-label">Total XP</div>
               </div>
-              <Star className="w-8 h-8 text-blue-200" />
+              <div className="stat-icon">⭐</div>
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white transform hover:scale-105 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-2xl font-bold">{user.streak}</div>
-                <div className="text-green-100">Day Streak</div>
+          <div className="stat-card stat-card-green">
+            <div className="stat-content">
+              <div className="stat-info">
+                <div className="stat-number">{user.streak}</div>
+                <div className="stat-label">Day Streak</div>
               </div>
-              <Flame className="w-8 h-8 text-green-200" />
+              <div className="stat-icon">🔥</div>
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white transform hover:scale-105 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-2xl font-bold">{user.totalQuizzes}</div>
-                <div className="text-purple-100">Quizzes Completed</div>
+          <div className="stat-card stat-card-purple">
+            <div className="stat-content">
+              <div className="stat-info">
+                <div className="stat-number">{user.totalQuizzes}</div>
+                <div className="stat-label">Quizzes Completed</div>
               </div>
-              <BookOpen className="w-8 h-8 text-purple-200" />
+              <div className="stat-icon">📚</div>
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white transform hover:scale-105 transition-all duration-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-2xl font-bold">{user.accuracy}%</div>
-                <div className="text-orange-100">Accuracy Rate</div>
+          <div className="stat-card stat-card-orange">
+            <div className="stat-content">
+              <div className="stat-info">
+                <div className="stat-number">{user.accuracy}%</div>
+                <div className="stat-label">Accuracy Rate</div>
               </div>
-              <Target className="w-8 h-8 text-orange-200" />
+              <div className="stat-icon">🎯</div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="main-grid">
           {/* Quiz Modules */}
-          <div className="lg:col-span-2">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h2 className="text-2xl font-bold text-white mb-6">Quiz Modules</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="quiz-modules-section">
+            <div className="section-card">
+              <h2 className="section-title">Quiz Modules</h2>
+              <div className="quiz-grid">
                 {quizModules.map((quiz) => (
-                  <div 
-                    key={quiz.id}
-                    className="bg-white/5 rounded-xl p-5 border border-white/10 hover:bg-white/10 transition-all duration-200 cursor-pointer group"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className={`w-3 h-3 rounded-full ${getCategoryColor(quiz.category)}`}></div>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(quiz.difficulty)}`}>
+                  <div key={quiz.id} className="quiz-card">
+                    <div className="quiz-header">
+                      <div className={`category-dot category-${quiz.category.toLowerCase()}`}></div>
+                      <span className={`difficulty-badge difficulty-${quiz.difficulty.toLowerCase()}`}>
                         {quiz.difficulty}
                       </span>
                     </div>
                     
-                    <h3 className="text-white font-semibold mb-2 group-hover:text-purple-300 transition-colors">
-                      {quiz.title}
-                    </h3>
+                    <h3 className="quiz-title">{quiz.title}</h3>
                     
-                    <div className="flex items-center text-gray-300 text-sm mb-3 space-x-4">
-                      <span className="flex items-center">
-                        <BookOpen className="w-4 h-4 mr-1" />
-                        {quiz.questions} questions
+                    <div className="quiz-meta">
+                      <span className="quiz-meta-item">
+                        📚 {quiz.questions} questions
                       </span>
-                      <span className="flex items-center">
-                        <Clock className="w-4 h-4 mr-1" />
-                        {quiz.duration}
+                      <span className="quiz-meta-item">
+                        ⏱️ {quiz.duration}
                       </span>
                     </div>
                     
-                    {quiz.completed ? (
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center text-green-400">
-                          <Award className="w-4 h-4 mr-1" />
-                          <span className="text-sm">Score: {quiz.score}%</span>
+                    <div className="quiz-footer">
+                      {quiz.completed ? (
+                        <div className="completed-info">
+                          <div className="score-info">
+                            🏆 Score: {quiz.score}%
+                          </div>
+                          <span className="xp-reward">+{quiz.xpReward} XP</span>
                         </div>
-                        <span className="text-xs text-purple-300">+{quiz.xpReward} XP</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-between">
-                        <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-purple-600 hover:to-pink-600 transition-all">
-                          Start Quiz
-                        </button>
-                        <span className="text-xs text-purple-300">+{quiz.xpReward} XP</span>
-                      </div>
-                    )}
+                      ) : (
+                        <div className="quiz-actions">
+                          <button 
+                            className="start-quiz-btn"
+                            onClick={() => handleQuizStart(quiz.id)}
+                          >
+                            Start Quiz
+                          </button>
+                          <span className="xp-reward">+{quiz.xpReward} XP</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Leaderboard */}
-          <div className="space-y-6">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                <Trophy className="w-6 h-6 mr-2 text-yellow-400" />
-                Leaderboard
+          {/* Sidebar */}
+          <div className="sidebar">
+            {/* Leaderboard */}
+            <div className="section-card">
+              <h2 className="section-title">
+                🏆 Leaderboard
               </h2>
-              <div className="space-y-3">
+              <div className="leaderboard-list">
                 {leaderboard.map((player) => (
                   <div 
                     key={player.rank}
-                    className={`flex items-center p-3 rounded-lg ${
-                      player.name === user.name ? 'bg-purple-500/20 border border-purple-400/30' : 'bg-white/5'
+                    className={`leaderboard-item ${
+                      player.name === user.name ? 'current-user' : ''
                     }`}
                   >
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold text-sm mr-3">
+                    <div className="rank-badge">
                       {player.rank}
                     </div>
-                    <div className="flex-1">
-                      <div className="text-white font-medium">{player.name}</div>
-                      <div className="text-gray-300 text-sm">{player.xp.toLocaleString()} XP</div>
+                    <div className="player-info">
+                      <div className="player-name">{player.name}</div>
+                      <div className="player-xp">{player.xp.toLocaleString()} XP</div>
                     </div>
-                    <div className="flex items-center text-orange-400">
-                      <Flame className="w-4 h-4 mr-1" />
-                      <span className="text-sm">{player.streak}</span>
+                    <div className="player-streak">
+                      🔥 {player.streak}
                     </div>
                   </div>
                 ))}
@@ -276,66 +290,60 @@ const Dashboard = () => {
             </div>
 
             {/* Achievements */}
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20">
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-                <Medal className="w-6 h-6 mr-2 text-purple-400" />
-                Achievements
+            <div className="section-card">
+              <h2 className="section-title">
+                🏅 Achievements
               </h2>
-              <div className="space-y-3">
-                {achievements.map((achievement) => {
-                  const Icon = achievement.icon;
-                  return (
-                    <div 
-                      key={achievement.id}
-                      className={`p-3 rounded-lg border ${
-                        achievement.unlocked 
-                          ? 'bg-green-500/10 border-green-400/30' 
-                          : 'bg-white/5 border-white/10'
-                      }`}
-                    >
-                      <div className="flex items-start">
-                        <div className={`p-2 rounded-lg mr-3 ${
-                          achievement.unlocked ? 'bg-green-500' : 'bg-gray-600'
-                        }`}>
-                          <Icon className="w-4 h-4 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-white font-medium text-sm">{achievement.name}</div>
-                          <div className="text-gray-300 text-xs mb-2">{achievement.description}</div>
-                          <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
-                            <div 
-                              className={`h-full transition-all duration-500 ${
-                                achievement.unlocked ? 'bg-green-500' : 'bg-purple-500'
-                              }`}
-                              style={{ width: `${achievement.progress}%` }}
-                            ></div>
-                          </div>
-                        </div>
+              <div className="achievements-list">
+                {achievements.map((achievement) => (
+                  <div 
+                    key={achievement.id}
+                    className={`achievement-item ${
+                      achievement.unlocked ? 'unlocked' : ''
+                    }`}
+                  >
+                    <div className="achievement-header">
+                      <div className="achievement-icon">
+                        {achievement.icon}
+                      </div>
+                      <div className="achievement-info">
+                        <div className="achievement-name">{achievement.name}</div>
+                        <div className="achievement-description">{achievement.description}</div>
                       </div>
                     </div>
-                  );
-                })}
+                    <div className="achievement-progress">
+                      <div 
+                        className="achievement-progress-fill"
+                        style={{ width: `${achievement.progress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
         {/* Daily Challenge */}
-        <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl p-6 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold mb-2 flex items-center">
-                <Zap className="w-6 h-6 mr-2" />
-                Daily Challenge
+        <div className="daily-challenge">
+          <div className="challenge-content">
+            <div className="challenge-info">
+              <h2 className="challenge-title">
+                ⚡ Daily Challenge
               </h2>
-              <p className="text-purple-100 mb-4">Complete today's special challenge for bonus XP!</p>
-              <div className="flex items-center space-x-4">
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">+500 XP</span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">Advanced</span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">15 min</span>
+              <p className="challenge-description">
+                Complete today's special challenge for bonus XP!
+              </p>
+              <div className="challenge-tags">
+                <span className="challenge-tag">+500 XP</span>
+                <span className="challenge-tag">Advanced</span>
+                <span className="challenge-tag">15 min</span>
               </div>
             </div>
-            <button className="bg-white text-purple-600 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 transition-all duration-200 transform hover:scale-105">
+            <button 
+              className="challenge-btn"
+              onClick={handleChallengeAccept}
+            >
               Accept Challenge
             </button>
           </div>
