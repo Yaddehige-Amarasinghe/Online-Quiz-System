@@ -25,7 +25,7 @@ const Dashboard = () => {
       title: "JavaScript Fundamentals",
       difficulty: "Beginner",
       questions: [
-        { id: 1, text: "What is the correct syntax for declaring a variable in JavaScript?", options: ["var x", "variable x", "v x", "let x"], correct: 0, explanation: "In JavaScript, variables can be declared using var, let, or const." },
+        { id: 1, text: "What is the correct syntax for declaring a variable in JavaScript?", options: ["var x", "variable x", "v x", "let x"], correct: 0, explanation: "In JavaScript, variables can be declared jouéSystem: using var, let, or const." },
         { id: 2, text: "Which method converts a string to an integer?", options: ["parseInt()", "toString()", "parseFloat()", "number()"], correct: 0, explanation: "parseInt() converts a string to an integer." },
         { id: 3, text: "What does === mean in JavaScript?", options: ["Assignment", "Equality", "Strict Equality", "Comparison"], correct: 2, explanation: "=== checks for strict equality (value and type)." },
         { id: 4, text: "Which keyword is used to define a function?", options: ["func", "function", "def", "lambda"], correct: 1, explanation: "The function keyword defines a function in JavaScript." },
@@ -205,9 +205,15 @@ const Dashboard = () => {
 
   const handleQuizStart = (quizId) => {
     const quiz = quizModules.find(q => q.id === quizId);
-    if (!quiz.completed) {
-      setActiveQuiz(quiz);
-    }
+    // Reset quiz state when starting (or restarting) a quiz
+    setQuizModules(prev =>
+      prev.map(q =>
+        q.id === quizId
+          ? { ...q, currentQuestion: 0, userAnswers: [], completed: false, score: null }
+          : q
+      )
+    );
+    setActiveQuiz(quiz);
   };
 
   const handleAnswerSubmit = (quizId, questionId, answerIndex) => {
@@ -267,7 +273,7 @@ const Dashboard = () => {
       return (
         (filter.category === "All" || quiz.category === filter.category) &&
         (filter.difficulty === "All" || quiz.difficulty === filter.difficulty) &&
-        (filter.status === "All" || 
+        (filter.status === "All" ||
          (filter.status === "Completed" && quiz.completed) ||
          (filter.status === "Not Started" && !quiz.completed)) &&
         (filter.questionCount === "All" ||
@@ -311,7 +317,7 @@ const Dashboard = () => {
                 <div className="level-info">
                   <div className="level-number">Level {user.level}</div>
                   <div className="progress-bar">
-                    <div 
+                    <div
                       className="progress-fill"
                       style={{ width: `${levelProgress}%` }}
                     ></div>
@@ -375,9 +381,9 @@ const Dashboard = () => {
               <div className="quiz-controls">
                 <h2 className="section-title">Quiz Modules</h2>
                 <div className="filters">
-                  <select 
-                    name="category" 
-                    value={filter.category} 
+                  <select
+                    name="category"
+                    value={filter.category}
                     onChange={handleFilterChange}
                     className="filter-select"
                   >
@@ -388,9 +394,9 @@ const Dashboard = () => {
                     <option value="Database">Database</option>
                     <option value="Integration">Integration</option>
                   </select>
-                  <select 
-                    name="difficulty" 
-                    value={filter.difficulty} 
+                  <select
+                    name="difficulty"
+                    value={filter.difficulty}
                     onChange={handleFilterChange}
                     className="filter-select"
                   >
@@ -399,9 +405,9 @@ const Dashboard = () => {
                     <option value="Intermediate">Intermediate</option>
                     <option value="Advanced">Advanced</option>
                   </select>
-                  <select 
-                    name="status" 
-                    value={filter.status} 
+                  <select
+                    name="status"
+                    value={filter.status}
                     onChange={handleFilterChange}
                     className="filter-select"
                   >
@@ -409,9 +415,9 @@ const Dashboard = () => {
                     <option value="Completed">Completed</option>
                     <option value="Not Started">Not Started</option>
                   </select>
-                  <select 
-                    name="questionCount" 
-                    value={filter.questionCount} 
+                  <select
+                    name="questionCount"
+                    value={filter.questionCount}
                     onChange={handleFilterChange}
                     className="filter-select"
                   >
@@ -420,8 +426,8 @@ const Dashboard = () => {
                     <option value="10-20">10-20</option>
                     <option value="More than 20">More than 20</option>
                   </select>
-                  <select 
-                    value={sortBy} 
+                  <select
+                    value={sortBy}
                     onChange={handleSortChange}
                     className="filter-select"
                   >
@@ -448,27 +454,25 @@ const Dashboard = () => {
                         <span className="quiz-meta-item">⏱️ {quiz.duration}</span>
                       </div>
                       <div className="quiz-footer">
-                        {quiz.completed ? (
+                        <div className="quiz-actions">
+                          <button
+                            className="start-quiz-btn"
+                            onClick={() => handleQuizStart(quiz.id)}
+                          >
+                            {quiz.completed ? 'Retake Quiz' : 'Start Quiz'}
+                          </button>
+                          <span className="xp-reward">+{quiz.xpReward} XP</span>
+                        </div>
+                        {quiz.completed && (
                           <div className="completed-info">
                             <div className="score-info">🏆 Score: {quiz.score}%</div>
-                            <span className="xp-reward">+{quiz.xpReward} XP</span>
-                          </div>
-                        ) : (
-                          <div className="quiz-actions">
-                            <button 
-                              className="start-quiz-btn"
-                              onClick={() => handleQuizStart(quiz.id)}
-                            >
-                              Start Quiz
-                            </button>
-                            <span className="xp-reward">+{quiz.xpReward} XP</span>
                           </div>
                         )}
                       </div>
                       {quiz.completed && (
                         <div className="quiz-progress">
                           <div className="progress-bar">
-                            <div 
+                            <div
                               className="progress-fill"
                               style={{ width: `${(quiz.userAnswers.length / quiz.questions.length) * 100}%` }}
                             ></div>
@@ -494,7 +498,7 @@ const Dashboard = () => {
               <h2 className="section-title">🏆 Leaderboard</h2>
               <div className="leaderboard-list">
                 {leaderboard.map((player) => (
-                  <div 
+                  <div
                     key={player.rank}
                     className={`leaderboard-item ${player.name === user.name ? 'current-user' : ''}`}
                   >
@@ -514,7 +518,7 @@ const Dashboard = () => {
               <h2 className="section-title">🏅 Achievements</h2>
               <div className="achievements-list">
                 {achievements.map((achievement) => (
-                  <div 
+                  <div
                     key={achievement.id}
                     className={`achievement-item ${achievement.unlocked ? 'unlocked' : ''}`}
                   >
@@ -526,7 +530,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <div className="achievement-progress">
-                      <div 
+                      <div
                         className="achievement-progress-fill"
                         style={{ width: `${achievement.progress}%` }}
                       ></div>
@@ -552,7 +556,7 @@ const Dashboard = () => {
                 <span className="challenge-tag">15 min</span>
               </div>
             </div>
-            <button 
+            <button
               className="challenge-btn"
               onClick={handleChallengeAccept}
             >
